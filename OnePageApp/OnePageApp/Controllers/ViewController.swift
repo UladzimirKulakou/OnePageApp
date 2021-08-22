@@ -17,20 +17,20 @@ class ViewController: UIViewController {
     let offset: CGFloat = 2.0
     let url = "https://loremflickr.com/200/200/"
     let cellId = "cellImage"
-    
+
     @IBOutlet weak var collectionView: UICollectionView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
     }
-    
+
     @IBAction func addOneImage(_ sender: UIBarButtonItem) {
-        AF.request(url).responseImage { response in
+        AF.request(url).responseImage { [weak self] response in
             if case .success(let image) = response.result {
-                self.images.append(image)
-                self.collectionView.reloadData()
+                self?.images.append(image)
+                self?.collectionView.reloadData()
             }
         }
     }
@@ -38,10 +38,10 @@ class ViewController: UIViewController {
         self.images = []
         self.collectionView.reloadData()
         for _ in 0...139 {
-            AF.request(url).responseImage { response in
+            AF.request(url).responseImage { [weak self] response in
                 if case .success(let image) = response.result {
-                    self.images.append(image)
-                    self.collectionView.reloadData()
+                    self?.images.append(image)
+                    self?.collectionView.reloadData()
                 }
             }
         }
@@ -74,3 +74,4 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
 
 
 }
+
