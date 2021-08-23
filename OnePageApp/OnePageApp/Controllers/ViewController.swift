@@ -13,10 +13,11 @@ import AlamofireImage
 class ViewController: UIViewController {
 
     var images = [UIImage]()
-    let countCells = 7
-    let offset: CGFloat = 2.0
-    let url = "https://loremflickr.com/200/200/"
-    let cellId = "cellImage"
+    var imageCount = 0
+    let countCells = Preferences().countCells
+    let offset: CGFloat = Preferences().offset
+    let url = Preferences().url
+    let cellId = Preferences().cellId
 
     @IBOutlet weak var collectionView: UICollectionView!
 
@@ -27,41 +28,27 @@ class ViewController: UIViewController {
     }
 
     @IBAction func addOneImage(_ sender: UIBarButtonItem) {
-        AF.request(url).responseImage { [weak self] response in
-            if case .success(let image) = response.result {
-                self?.images.append(image)
-                self?.collectionView.reloadData()
-            }
-        }
+        imageCount += 1
+        self.collectionView.reloadData()
     }
+    
     @IBAction func reloadImage(_ sender: Any) {
         self.images = []
+        imageCount = 140
         self.collectionView.reloadData()
-        for _ in 0...139 {
-            AF.request(url).responseImage { [weak self] response in
-                if case .success(let image) = response.result {
-                    self?.images.append(image)
-                    self?.collectionView.reloadData()
-                }
-            }
-        }
     }
 }
 
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        images.count
+        imageCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ImageCollectionViewCell
-        cell.activityIndicator.stopAnimating()
-        cell.activityIndicator.isHidden = true
 
-        let image = images[indexPath.item]
-        cell.photoView.image = image
-
+        cell.fetchImsge()
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
