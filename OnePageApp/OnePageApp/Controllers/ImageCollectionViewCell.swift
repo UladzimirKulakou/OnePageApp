@@ -12,7 +12,11 @@ import Alamofire
 class ImageCollectionViewCell: UICollectionViewCell {
 
     let url = "https://loremflickr.com/200/200/"
-    var cellIndex = 0
+
+    let imageCache = AutoPurgingImageCache(
+        memoryCapacity: 100_000_000,
+        preferredMemoryUsageAfterPurge: 60_000_000
+    )
 
     @IBOutlet weak var photoView: UIImageView!
     //
@@ -28,7 +32,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
             if case .success(let image) = response.result {
                 self?.photoView.image = image
                 self?.activityIndicator.stopAnimating()
-                self?.cellIndex += 1
+             
             }
         }
     }

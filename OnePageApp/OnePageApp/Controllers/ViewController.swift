@@ -11,7 +11,8 @@ import AlamofireImage
 
 
 class ViewController: UIViewController {
-
+    var indexPaths = [IndexPath]()
+    
     var images = [UIImage]()
     var imageCount = 0
     let countCells = Preferences().countCells
@@ -29,6 +30,7 @@ class ViewController: UIViewController {
 
     @IBAction func addOneImage(_ sender: UIBarButtonItem) {
         imageCount += 1
+        
         self.collectionView.reloadData()
     }
     
