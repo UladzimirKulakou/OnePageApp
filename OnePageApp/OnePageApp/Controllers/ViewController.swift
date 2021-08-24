@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         AF.request(self.url).responseImage(queue: .global(qos: .utility)) { [unowned self] response in
             if case .success(let image) = response.result {
                 DispatchQueue.main.async() { self.data[index] = .loaded(image: image)
-                self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
+                    self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
                 }
             }
         }
@@ -51,11 +51,11 @@ class ViewController: UIViewController {
 
     @IBAction func reloadImage(_ sender: Any) {
         data = Array(repeating: .loading, count: 140)
-        
+
         self.collectionView.reloadData()
-        
+
         (0..<140).forEach { index in
-           
+
             AF.request(self.url).responseImage(queue: .global(qos: .utility)) { [unowned self] response in
                 if case .success(let image) = response.result {
                     DispatchQueue.main.async() { self.data[index] = .loaded(image: image)
