@@ -58,8 +58,8 @@ class ViewController: UIViewController {
            
             AF.request(self.url).responseImage(queue: .global(qos: .utility)) { [unowned self] response in
                 if case .success(let image) = response.result {
-                    DispatchQueue.main.async { self.data[index] = .loaded(image: image)
-                        self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
+                    DispatchQueue.main.async() { self.data[index] = .loaded(image: image)
+                        self.collectionView.reloadData()
                     }
                 }
             }
