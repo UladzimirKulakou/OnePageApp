@@ -7,14 +7,21 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 
+class Downloader {
+
+    class func downloadImageWithURL(_ url: String) -> UIImage! {
+
+        let data = try? Data(contentsOf: URL(string: url)!)
+        return UIImage(data: data!)
+    }
+}
 
 class ViewController: UIViewController {
     var indexPaths = [IndexPath]()
-    
-    var images = [UIImage]()
-    var imageCount = 0
+
+    var data = [State]()
     let countCells = Preferences().countCells
     let offset: CGFloat = Preferences().offset
     let url = Preferences().url
@@ -29,28 +36,47 @@ class ViewController: UIViewController {
     }
 
     @IBAction func addOneImage(_ sender: UIBarButtonItem) {
-        imageCount += 1
+        data.append(.loading)
+        let index = data.endIndex - 1
+        self.collectionView.reloadData()
+
+        AF.request(self.url).responseImage { [unowned self] response in
+            if case .success(let image) = response.result {
+                self.data[index] = .loaded(image: image)
+                self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
+
+            }
+        }
+    }
+
+    @IBAction func reloadImage(_ sender: Any) {
+        data = Array(repeating: .loading, count: 140)
         
         self.collectionView.reloadData()
-    }
-    
-    @IBAction func reloadImage(_ sender: Any) {
-        self.images = []
-        imageCount = 140
-        self.collectionView.reloadData()
+        
+        (0..<140).forEach { index in
+           
+            AF.request(self.url).responseImage(queue: .global(qos: .utility)) { [unowned self] response in
+                if case .success(let image) = response.result {
+                    DispatchQueue.main.async { self.data[index] = .loaded(image: image)
+                        self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
+                    }
+                }
+            }
+        }
     }
 }
 
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageCount
+        return data.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ImageCollectionViewCell
 
-        cell.fetchImsge()
+        cell.update(state: data[indexPath.row])
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

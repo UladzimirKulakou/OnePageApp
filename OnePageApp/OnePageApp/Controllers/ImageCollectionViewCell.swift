@@ -9,14 +9,12 @@ import UIKit
 import AlamofireImage
 import Alamofire
 
+enum State {
+    case loading
+    case loaded(image: UIImage)
+}
 class ImageCollectionViewCell: UICollectionViewCell {
 
-    let url = "https://loremflickr.com/200/200/"
-
-    let imageCache = AutoPurgingImageCache(
-        memoryCapacity: 100_000_000,
-        preferredMemoryUsageAfterPurge: 60_000_000
-    )
 
     @IBOutlet weak var photoView: UIImageView!
     //
@@ -27,16 +25,21 @@ class ImageCollectionViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 7
         // Initialization code
     }
-    func fetchImsge() {
-        AF.request(url).responseImage { [weak self] response in
-            if case .success(let image) = response.result {
-                self?.photoView.image = image
-                self?.activityIndicator.stopAnimating()
-             
+    func update(state: State) {
+        switch state {
+        case .loading:
+            if !activityIndicator.isAnimating {
+                activityIndicator.startAnimating()
             }
+            photoView.image = nil
+        case let .loaded(image: image):
+            if activityIndicator.isAnimating {
+                activityIndicator.stopAnimating()
+            }
+            photoView.image = image
         }
     }
-    
+
 
 }
 
