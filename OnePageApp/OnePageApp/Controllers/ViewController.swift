@@ -40,11 +40,11 @@ class ViewController: UIViewController {
         let index = data.endIndex - 1
         self.collectionView.reloadData()
 
-        AF.request(self.url).responseImage { [unowned self] response in
+        AF.request(self.url).responseImage(queue: .global(qos: .utility)) { [unowned self] response in
             if case .success(let image) = response.result {
-                self.data[index] = .loaded(image: image)
+                DispatchQueue.main.async() { self.data[index] = .loaded(image: image)
                 self.collectionView.reloadItems(at: [.init(item: index, section: 0)])
-
+                }
             }
         }
     }
