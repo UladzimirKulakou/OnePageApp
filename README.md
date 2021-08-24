@@ -1,8 +1,8 @@
 # OnePageApp
 
 
-<img src="https://github.com/UladzimirKulakou/OnePageApp/blob/main/1.gif" width="400" height="850" />
-<img src="https://github.com/UladzimirKulakou/OnePageApp/blob/main/1-2.gif" width="400" height="850" />
+<img src="https://github.com/UladzimirKulakou/OnePageApp/blob/main/1.gif" width="370" height="810" />
+<img src="https://github.com/UladzimirKulakou/OnePageApp/blob/main/1-2.gif" width="370" height="810" />
 
 
 # Install
