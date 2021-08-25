@@ -20,11 +20,11 @@ One page application based on UICollectionView with a list of images.
 
 # Technologies
 
-Alamofire
-AlamofireImage
-Dispatch Queues
-UIKit
-CollectionViews
+Alamofire />
+AlamofireImage />
+Dispatch Queues />
+UIKit />
+CollectionViews />
 
 
 # Created by
