@@ -18,6 +18,14 @@ One page application based on UICollectionView with a list of images.
 ●    “Reload All” function remove all existing images and load 140 new 
 ●    Images are rounded with corner radius = 7.
 
+# Technologies
+
+Alamofire
+AlamofireImage
+Dispatch Queues
+UIKit
+CollectionViews
+
 
 # Created by
 
